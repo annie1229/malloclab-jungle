@@ -73,8 +73,7 @@ static void place(void *bp, size_t asize);
 /* 
  * mm_init - initialize the malloc package.
  */
-int mm_init(void)
-{
+int mm_init(void) {
     /* Create the initial empty heap */
     if ((heap_listp = mem_sbrk(4*WSIZE)) == (void *) - 1)
         return -1;
@@ -86,8 +85,8 @@ int mm_init(void)
     heap_listp += (2*WSIZE);
     prev_findp = heap_listp;
 
-    /* Extend the empty heap with a free block of CHUNKSIZE bytes */
-    if (extend_heap(4) == NULL) // CHUNKSIZE/WSIZE = 1024 = 2^10
+    /* Extend the empty heap with a free block of minimum possible block size */
+    if (extend_heap(4) == NULL)
         return -1;
     return 0;
 }
@@ -96,8 +95,7 @@ int mm_init(void)
  * mm_malloc - Allocate a block by incrementing the brk pointer.
  *     Always allocate a block whose size is a multiple of the alignment.
  */
-void *mm_malloc(size_t size)
-{
+void *mm_malloc(size_t size) {
     size_t asize; // Adjusted block size
     size_t extendsize; // Amount to extend heap if no fit
     char *bp;
@@ -129,8 +127,7 @@ void *mm_malloc(size_t size)
 /*
  * mm_free - Freeing a block does nothing.
  */
-void mm_free(void *bp)
-{
+void mm_free(void *bp) {
     size_t size = GET_SIZE(HDRP(bp));
 
     PUT(HDRP(bp), PACK(size, 0));
@@ -141,8 +138,7 @@ void mm_free(void *bp)
 /*
  * mm_realloc - Implemented simply in terms of mm_malloc and mm_free
  */
-void *mm_realloc(void *ptr, size_t size)
-{
+void *mm_realloc(void *ptr, size_t size) {
     size_t oldsize;
     void *newptr;
 
