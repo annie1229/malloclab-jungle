@@ -104,9 +104,9 @@ void *mm_malloc(size_t size) {
     
     /* Adjust block size to include overhead and alignment reqs */
     if (size <= DSIZE)
-        asize = 2*DSIZE;
+        asize = 2 * DSIZE;
     else    
-        asize = DSIZE * ((size + (DSIZE) + (DSIZE-1)) / DSIZE);
+        asize = DSIZE * ((size + (DSIZE) + (DSIZE - 1)) / DSIZE);
 
     /* Search the free list for a fit */
     if ((bp = find_fit(asize)) != NULL) {

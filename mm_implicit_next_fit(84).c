@@ -182,21 +182,27 @@ static void *coalesce(void *bp) {
     }
     else if (prev_alloc && !next_alloc) { // Case 2
         size += GET_SIZE(HDRP(NEXT_BLKP(bp)));
+        
         PUT(HDRP(bp), PACK(size, 0));
         PUT(FTRP(bp), PACK(size, 0));
     }
     else if (!prev_alloc && next_alloc) {
         size += GET_SIZE(HDRP(PREV_BLKP(bp)));
+
         PUT(FTRP(bp), PACK(size, 0));
         PUT(HDRP(PREV_BLKP(bp)), PACK(size, 0));
         bp = PREV_BLKP(bp);
     }
     else {
         size += GET_SIZE(HDRP(PREV_BLKP(bp))) + GET_SIZE(FTRP(NEXT_BLKP(bp)));
+
         PUT(HDRP(PREV_BLKP(bp)), PACK(size, 0));
         PUT(FTRP(NEXT_BLKP(bp)), PACK(size, 0));
         bp = PREV_BLKP(bp);
     }
+
+    // if (bp <= prev_findp && prev_findp < FTRP(bp))
+    // if (bp <= prev_findp)
     prev_findp = bp;
     return bp;
 }
@@ -210,6 +216,7 @@ static void *extend_heap(size_t words) {
 
     /* Allocate an even number of words to maintain alignment */
     size = (words % 2) ? (words + 1) * WSIZE : words * WSIZE;
+    
     if ((bp = mem_sbrk(size)) == (void *) - 1) 
         return NULL;
 
@@ -223,7 +230,7 @@ static void *extend_heap(size_t words) {
 }
 
 static void *find_fit(size_t asize) {
-    /* First-fit search */
+    /* Next-fit search */
     void *bp;
 
     for (bp = prev_findp; GET_SIZE(HDRP(bp)) > 0; bp = NEXT_BLKP(bp)) {
