@@ -66,8 +66,8 @@ team_t team = {
 /* bp is address of the free block. Since minimum Block size is 16 bytes, 
    we utilize to store the address of previous block pointer and next block pointer.
 */
-#define GET_NEXT_PTR(bp)  (*(char **)(bp + WSIZE))
-#define GET_PREV_PTR(bp)  (*(char **)(bp))
+#define GET_NEXT_PTR(bp)  (*(char **)(bp))
+#define GET_PREV_PTR(bp)  (*(char **)(bp + WSIZE))
 
 /* Puts pointers in the next and previous elements of free list */
 #define SET_NEXT_PTR(bp, qp) (GET_NEXT_PTR(bp) = (qp))
@@ -93,7 +93,7 @@ static void remove_from_free_list(void *bp);
 int mm_init(void) {
     /* Create the initial empty heap. */
     if ((heap_listp = mem_sbrk(6*WSIZE)) == (void *) - 1) 
-      return -1;
+        return -1;
 
     PUT(heap_listp, 0);                                 // Alignment paddine
     PUT(heap_listp + (1*WSIZE), PACK(2*DSIZE, 1));      // Prologue header

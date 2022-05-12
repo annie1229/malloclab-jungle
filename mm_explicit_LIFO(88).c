@@ -68,8 +68,8 @@ team_t team = {
 /* bp is address of the free block. Since minimum Block size is 16 bytes, 
    we utilize to store the address of previous block pointer and next block pointer.
 */
-#define GET_NEXT_PTR(bp)  (*(char **)(bp + WSIZE))
-#define GET_PREV_PTR(bp)  (*(char **)(bp))
+#define GET_NEXT_PTR(bp)  (*(char **)(bp))
+#define GET_PREV_PTR(bp)  (*(char **)(bp + WSIZE))
 
 /* Puts pointers in the next and previous elements of free list */
 #define SET_NEXT_PTR(bp, qp) (GET_NEXT_PTR(bp) = (qp))

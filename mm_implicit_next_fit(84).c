@@ -202,8 +202,8 @@ static void *coalesce(void *bp) {
     }
 
     // if (bp <= prev_findp && prev_findp < FTRP(bp))
-    // if (bp <= prev_findp)
-    prev_findp = bp;
+    if (bp <= prev_findp)
+        prev_findp = bp;
     return bp;
 }
 
